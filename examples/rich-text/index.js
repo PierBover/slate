@@ -134,7 +134,8 @@ class RichTextExample extends React.Component {
     if (type != 'bulleted-list' && type != 'numbered-list') {
       const isActive = this.hasBlock(type)
       const isList = this.hasBlock('list-item')
-
+      
+      // Check if the current node is a list to unwrap the outer tags.
       if (isList) {
         change
           .setBlocks(isActive ? DEFAULT_NODE : type)
@@ -146,11 +147,12 @@ class RichTextExample extends React.Component {
     } else {
       // Handle the extra wrapping required for list buttons.
       const isList = this.hasBlock('list-item')
-      const isType = value.blocks.some(block => {
+      // Check if the current node is the same type of list.
+      const isSameType = value.blocks.some(block => {
         return !!document.getClosest(block.key, parent => parent.type == type)
       })
 
-      if (isList && isType) {
+      if (isList && isSameType) {
         change
           .setBlocks(DEFAULT_NODE)
           .unwrapBlock('bulleted-list')
